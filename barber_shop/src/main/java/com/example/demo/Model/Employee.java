@@ -11,34 +11,70 @@ import java.util.List;
  */
 @Entity
 @Table(name="employees")
-@NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	@Column(name="address")
 	private String address;
-	private String email;
-	private String firstname;
+@Transient
+   private String  ConfirmPassword;
+	public String getConfirmPassword() {
+	return ConfirmPassword;
+}
+
+
+
+public void setConfirmPassword(String confirmPassword) {
+	ConfirmPassword = confirmPassword;
+}
+
+	@Column(name="first_name")
+	private String firstName;
+
 	private String gender;
-	private String lastname;
-	private String pass;
+
+	@Column(name="last_name")
+	private String lastName;
+
+
+
+
+	private String password;
+
 	private String phone;
+
+
+
 	private String username;
+
+
+	//bi-directional many-to-one association to Type
+	@ManyToOne
+	@JoinColumn(name="employeetypee_id")
 	private Type type;
+
+	//bi-directional many-to-one association to Order
+	@OneToMany(mappedBy="employee")
 	private List<Order> orders;
 
 	public Employee() {
 	}
 
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+
 	public int getId() {
-		return this.id;
+		return id;
 	}
+
+
 
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 
 	public String getAddress() {
@@ -46,29 +82,23 @@ public class Employee implements Serializable {
 	}
 
 
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
 
-	public String getEmail() {
-		return email;
+
+	public String getFirstName() {
+		return firstName;
 	}
 
 
-	public void setEmail(String email) {
-		this.email = email;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
 
 
 	public String getGender() {
@@ -76,29 +106,35 @@ public class Employee implements Serializable {
 	}
 
 
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
 
-	public String getLastname() {
-		return lastname;
+
+	public String getLastName() {
+		return lastName;
 	}
 
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 
-	public String getPass() {
-		return pass;
+
+	public String getPassword() {
+		return password;
 	}
 
 
-	public void setPass(String pass) {
-		this.pass = pass;
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
+
 
 
 	public String getPhone() {
@@ -106,9 +142,11 @@ public class Employee implements Serializable {
 	}
 
 
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 
 
 	public String getUsername() {
@@ -116,32 +154,41 @@ public class Employee implements Serializable {
 	}
 
 
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	@ManyToOne()
-	@JoinColumn(name="type_id")
-	public Type getType() {
-		return type;
-	}
 
+
+	public Type getType() {
+		return this.type;
+	}
 
 	public void setType(Type type) {
 		this.type = type;
 	}
 
-     @OneToMany(mappedBy = "employee")
 	public List<Order> getOrders() {
-		return orders;
+		return this.orders;
 	}
-
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
 
+	public Order addOrder(Order order) {
+		getOrders().add(order);
+		order.setEmployee(this);
 
-	
+		return order;
+	}
+
+	public Order removeOrder(Order order) {
+		getOrders().remove(order);
+		order.setEmployee(null);
+
+		return order;
+	}
 
 }

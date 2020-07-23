@@ -11,24 +11,35 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Type.findAll", query="SELECT t FROM Type t")
+@Table(name="type")
 public class Type implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
+
 	private String name;
+
+
+	//bi-directional many-to-one association to Employee
+	@OneToMany(mappedBy="type")
 	private List<Employee> employees;
 
 	public Type() {
 	}
 
+	public Type(long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -40,9 +51,6 @@ public class Type implements Serializable {
 		this.name = name;
 	}
 
-
-	//bi-directional many-to-one association to Employee
-	@OneToMany(mappedBy="type")
 	public List<Employee> getEmployees() {
 		return this.employees;
 	}

@@ -9,32 +9,40 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQuery(name="Contact.findAll", query="SELECT c FROM Contact c")
+@Table(name="contact")
 public class Contact implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private long id;
+
+
 	private String name;
+
 	private String phone;
+
 	@Column(name="u_mail")
 	private String uMail;
+
 	@Column(name="u_msg")
 	private String uMsg;
+
+	
 
 	public Contact() {
 	}
 
-	public int getId() {
-		return id;
+	public long getId() {
+		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -42,7 +50,7 @@ public class Contact implements Serializable {
 	}
 
 	public String getPhone() {
-		return phone;
+		return this.phone;
 	}
 
 	public void setPhone(String phone) {
@@ -65,7 +73,5 @@ public class Contact implements Serializable {
 		this.uMsg = uMsg;
 	}
 
-
 	
-
 }

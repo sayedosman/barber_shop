@@ -15,64 +15,19 @@ import java.util.List;
 @NamedQuery(name="ServicesType.findAll", query="SELECT s FROM ServicesType s")
 public class ServicesType implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
-	private String desc;
-	private String name;
-	private double price;
-	private Time time;
-	private List<Order> orders;
-	private Service service;
-
-	public ServicesType() {
-	}
-
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
-		return this.id;
-	}
+	private long id;
+	 @Column(name="description")
+	private String desc;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	@Column(name="estimated_time")
+	private Time estimatedTime;
 
+	private String name;
 
-	public String getDesc() {
-		return this.desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public double getPrice() {
-		return this.price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-
-	public Time getTime() {
-		return this.time;
-	}
-
-	public void setTime(Time time) {
-		this.time = time;
-	}
-
+	private float price;
 
 	//bi-directional many-to-many association to Order
 	@ManyToMany
@@ -85,6 +40,55 @@ public class ServicesType implements Serializable {
 			@JoinColumn(name="order_id")
 			}
 		)
+	private List<Order> orders;
+
+	//bi-directional many-to-one association to Service
+	@ManyToOne
+	private Service service;
+
+	public ServicesType() {
+	}
+
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getDesc() {
+		return this.desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public Time getEstimatedTime() {
+		return this.estimatedTime;
+	}
+
+	public void setEstimatedTime(Time estimatedTime) {
+		this.estimatedTime = estimatedTime;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public float getPrice() {
+		return this.price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public List<Order> getOrders() {
 		return this.orders;
 	}
@@ -93,9 +97,6 @@ public class ServicesType implements Serializable {
 		this.orders = orders;
 	}
 
-
-	//bi-directional many-to-one association to Service
-	@ManyToOne(fetch=FetchType.LAZY)
 	public Service getService() {
 		return this.service;
 	}

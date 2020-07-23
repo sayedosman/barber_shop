@@ -14,26 +14,38 @@ import java.util.List;
 @NamedQuery(name="Service.findAll", query="SELECT s FROM Service s")
 public class Service implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int id;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
+   @Column(name="description")
 	private String desc;
-	private String image;
+
 	private String name;
+
+	private String picture;
+
+	//bi-directional many-to-one association to ServicesType
+	@OneToMany(mappedBy="service")
 	private List<ServicesType> servicesTypes;
 
 	public Service() {
 	}
 
+	public Service(long id, String desc, String name, String picture, List<ServicesType> servicesTypes) {
+		this.id = id;
+		this.desc = desc;
+		this.name = name;
+		this.picture = picture;
+	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getDesc() {
 		return this.desc;
@@ -43,16 +55,6 @@ public class Service implements Serializable {
 		this.desc = desc;
 	}
 
-
-	public String getImage() {
-		return this.image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-
 	public String getName() {
 		return this.name;
 	}
@@ -61,9 +63,14 @@ public class Service implements Serializable {
 		this.name = name;
 	}
 
+	public String getPicture() {
+		return this.picture;
+	}
 
-	//bi-directional many-to-one association to ServicesType
-	@OneToMany(mappedBy="service")
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
 	public List<ServicesType> getServicesTypes() {
 		return this.servicesTypes;
 	}
