@@ -2,6 +2,15 @@ package com.example.demo.Model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.Time;
 import java.util.List;
 
@@ -12,7 +21,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="services_type")
-@NamedQuery(name="ServicesType.findAll", query="SELECT s FROM ServicesType s")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class,
+		  property = "id")
 public class ServicesType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +41,7 @@ public class ServicesType implements Serializable {
 	private float price;
 
 	//bi-directional many-to-many association to Order
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 		name="order_services"
 		, joinColumns={
@@ -40,10 +51,14 @@ public class ServicesType implements Serializable {
 			@JoinColumn(name="order_id")
 			}
 		)
+	
+	@JsonManagedReference
 	private List<Order> orders;
 
 	//bi-directional many-to-one association to Service
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="service_id")
+	@JsonBackReference
 	private Service service;
 
 	public ServicesType() {

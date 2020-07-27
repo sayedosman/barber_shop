@@ -2,6 +2,16 @@ package com.example.demo.Model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.math.BigInteger;
 import java.util.List;
 
@@ -12,6 +22,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="type")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class,
+		  property = "id")
 public class Type implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +36,8 @@ public class Type implements Serializable {
 
 
 	//bi-directional many-to-one association to Employee
-	@OneToMany(mappedBy="type")
+	@OneToMany(mappedBy="type",fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Employee> employees;
 
 	public Type() {

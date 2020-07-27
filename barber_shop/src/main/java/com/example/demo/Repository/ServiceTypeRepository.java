@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.Model.ServicesType;
 
 @Repository
-public interface ServiceTypesRepository extends JpaRepository<ServicesType, Long>{
+public interface ServiceTypeRepository extends JpaRepository<ServicesType, Long>{
 
 }

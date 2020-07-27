@@ -2,6 +2,16 @@ package com.example.demo.Model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Filter;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +22,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="orders")
-@NamedQuery(name="Order.findAll", query="SELECT o FROM Order o")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class,
+		  property = "id")
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -38,11 +50,14 @@ public class Order implements Serializable {
 	private float totalPrice;
 
 	//bi-directional many-to-many association to ServicesType
-	@ManyToMany(mappedBy="orders")
+	@ManyToMany(mappedBy="orders",fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<ServicesType> servicesTypes;
 
 	//bi-directional many-to-one association to Employee
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="employee_id")
+	@JsonBackReference
 	private Employee employee;
 
 	public Order() {

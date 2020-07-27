@@ -2,6 +2,14 @@ package com.example.demo.Model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
 
 
@@ -11,6 +19,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="employees")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class,
+		  property = "id")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -41,7 +52,7 @@ public void setConfirmPassword(String confirmPassword) {
 
 
 
-
+@JsonIgnore
 	private String password;
 
 	private String phone;
@@ -52,12 +63,15 @@ public void setConfirmPassword(String confirmPassword) {
 
 
 	//bi-directional many-to-one association to Type
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="employeetypee_id")
+	
+	@JsonBackReference
 	private Type type;
 
 	//bi-directional many-to-one association to Order
-	@OneToMany(mappedBy="employee")
+	@OneToMany(mappedBy="employee",fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Order> orders;
 
 	public Employee() {

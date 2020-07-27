@@ -2,6 +2,15 @@ package com.example.demo.Model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
 
 
@@ -11,7 +20,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="services")
-@NamedQuery(name="Service.findAll", query="SELECT s FROM Service s")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class,
+		  property = "id")
 public class Service implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,17 +37,11 @@ public class Service implements Serializable {
 	private String picture;
 
 	//bi-directional many-to-one association to ServicesType
-	@OneToMany(mappedBy="service")
+	@OneToMany(mappedBy="service",fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<ServicesType> servicesTypes;
 
 	public Service() {
-	}
-
-	public Service(long id, String desc, String name, String picture, List<ServicesType> servicesTypes) {
-		this.id = id;
-		this.desc = desc;
-		this.name = name;
-		this.picture = picture;
 	}
 
 	public long getId() {
